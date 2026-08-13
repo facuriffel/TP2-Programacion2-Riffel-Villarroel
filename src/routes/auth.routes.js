@@ -1,13 +1,14 @@
-const express = require('express');
-const router = express.Router();
-const { login, registro, obtenerPerfil } = require('../controllers/auth.controller');
-const { verificarToken } = require('../middlewares/verificarToken'); // Revisa cómo exportó/nombró Facu este middleware
+const { Router } = require('express');
+const { login, registro, perfil, obtenerCoberturas } = require('../controllers/auth.controller');
+const { verificarToken } = require('../middlewares/auth.middleware');
 
-// Ruta existente de Facu
+const router = Router();
+
+router.get('/coberturas', obtenerCoberturas);
+
+router.post('/registro', registro);
 router.post('/login', login);
 
-// Tus rutas
-router.post('/registro', registro);
-router.get('/perfil', verificarToken, obtenerPerfil);
+router.get('/perfil', verificarToken, perfil);
 
 module.exports = router;
