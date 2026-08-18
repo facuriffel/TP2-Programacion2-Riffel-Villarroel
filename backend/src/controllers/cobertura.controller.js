@@ -1,9 +1,9 @@
-const db = require('../database/db'); // Ajusta la ruta a la conexión de base de datos de Facu
+const db = require('../database/db');
 
 const obtenerCoberturas = async (req, res) => {
   try {
     const [coberturas] = await db.query('SELECT id_cobertura, nombre FROM cobertura');
-    
+
     return res.status(200).json({
       codigo: 200,
       estado: "ok",
