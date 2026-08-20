@@ -1,0 +1,591 @@
+{
+  "info": {
+    "_postman_id": "6f1cdd4b-3b4d-491d-bb0f-ff614ea82f52",
+    "name": "TP2 - API (Riffel-Villarroel)",
+    "description": "Colección completa de endpoints para el proyecto",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "47962872",
+    "_collection_link": "https://go.postman.co/collection/47962872-6f1cdd4b-3b4d-491d-bb0f-ff614ea82f52?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Comprobar estado de API",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Registro de usuario",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Juan Perez\",\n    \"email\": \"juan@ejemplo.com\",\n    \"password\": \"123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/registro",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "registro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Iniciar Sesión (Login)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var respuesta = pm.response.json();\nif (pm.response.code === 200) {\n    if (respuesta.datos && respuesta.datos.token) {\n        // Usamos un nombre único para este proyecto\n        pm.collectionVariables.set(\"tp2_token\", respuesta.datos.token);\n        console.log(\"¡Token guardado como tp2_token!\");\n    }\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"dni\": \"99999999\",\n    \"contrasena\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Coberturas (Auth)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/coberturas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "coberturas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ver Perfil",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/perfil",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "perfil"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Coberturas",
+      "item": [
+        {
+          "name": "Listar Coberturas",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/coberturas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "coberturas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Cobertura (solo admin)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"OSDE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/coberturas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "coberturas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Modificar Cobertura (solo admin)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"OSDE Modificada\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/coberturas/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "coberturas",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Cobertura (solo admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/coberturas/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "coberturas",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Sedes (solo admin)",
+      "item": [
+        {
+          "name": "Listar Sedes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/sedes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "sedes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Sede",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Sede Centro\",\n    \"direccion\": \"Av. Principal 123\",\n    \"telefono\": \"3511234567\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/sedes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "sedes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Modificar Sede",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Sede Centro Actualizada\",\n    \"direccion\": \"Av. Principal 123\",\n    \"telefono\": \"3511234567\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/sedes/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "sedes",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Sede",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/sedes/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "sedes",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Especialidades (solo admin)",
+      "item": [
+        {
+          "name": "Listar Especialidades",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/especialidades",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "especialidades"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Especialidad",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"descripcion\": \"Cardiología\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/especialidades",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "especialidades"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Modificar Especialidad",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"descripcion\": \"Cardiología Pediátrica\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/especialidades/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "especialidades",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Especialidad",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/especialidades/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "especialidades",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Agenda (solo medico u operador)",
+      "item": [
+        {
+          "name": "Listar Agenda",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/agenda",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "agenda"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Agenda",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"fecha\": \"2024-05-10\",\n    \"hora_entrada\": \"09:00:00\",\n    \"hora_salida\": \"12:00:00\",\n    \"id_medico\": 6,\n    \"id_especialidad\": 1,\n    \"id_sede\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/agenda",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "agenda"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Modificar Agenda",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"fecha\": \"2024-05-11\",\n    \"hora_entrada\": \"10:00:00\",\n    \"hora_salida\": \"13:00:00\",\n    \"id_especialidad\": 1,\n    \"id_sede\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/agenda/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "agenda",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Agenda",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/agenda/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "agenda",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "4"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{tp2_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "tp2_token",
+      "value": ""
+    }
+  ]
+}
