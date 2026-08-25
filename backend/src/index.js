@@ -10,6 +10,7 @@ app.use('/sedes', require('./routes/sede.routes'));
 app.use('/especialidades', require('./routes/especialidad.routes'));
 app.use('/coberturas', require('./routes/cobertura.routes'));
 app.use('/agenda', require('./routes/agenda.routes'));
+app.use('/turnos', require('./routes/turno.routes'));
 
 const PORT = process.env.PORT || 3000;
 
