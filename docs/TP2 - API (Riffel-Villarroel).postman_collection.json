@@ -247,7 +247,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "1"
+                  "value": "2"
                 }
               ]
             }
@@ -538,7 +538,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "2"
+                  "value": "4"
                 }
               ]
             }
@@ -563,6 +563,113 @@
                 {
                   "key": "id",
                   "value": "4"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Turnos",
+      "item": [
+        {
+          "name": "Crear Turno (Fuera de agenda)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id_especialidad\": 2,\n    \"id_sede\": 2,\n    \"id_medico\": 6,\n    \"fecha\": \"2024-05-10\",\n    \"hora\": \"15:00:00\",\n    \"nota\": \"Consulta fuera de horario\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/turnos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "turnos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Turno (Horario válido)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id_especialidad\": 1,\n    \"id_sede\": 1,\n    \"id_medico\": 6,\n    \"fecha\": \"2026-08-20\",\n    \"hora\": \"10:00:00\",\n    \"nota\": \"Consulta de rutina\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/turnos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "turnos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancelar Turno",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/turnos/:id/cancelar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "turnos",
+                ":id",
+                "cancelar"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "3"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atender Turno (Solo médico)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/turnos/:id/atender",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "turnos",
+                ":id",
+                "atender"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "3"
                 }
               ]
             }
