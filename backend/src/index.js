@@ -11,6 +11,8 @@ app.use('/especialidades', require('./routes/especialidad.routes'));
 app.use('/coberturas', require('./routes/cobertura.routes'));
 app.use('/agenda', require('./routes/agenda.routes'));
 app.use('/turnos', require('./routes/turno.routes'));
+app.use('/historial', require('./routes/historial.routes'));
+app.use('/notificaciones', require('./routes/notificacion.routes'));
 
 const PORT = process.env.PORT || 3000;
 
