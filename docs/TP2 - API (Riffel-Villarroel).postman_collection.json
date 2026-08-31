@@ -575,6 +575,23 @@
       "name": "Turnos",
       "item": [
         {
+          "name": "Listar Turnos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/turnos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "turnos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Crear Turno (Fuera de agenda)",
           "request": {
             "method": "POST",
@@ -670,6 +687,108 @@
                 {
                   "key": "id",
                   "value": "3"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Historial Clínico",
+      "item": [
+        {
+          "name": "Consultar Historial (Paciente/Médico)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/historial?id_paciente=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "historial"
+              ],
+              "query": [
+                {
+                  "key": "id_paciente",
+                  "value": "1",
+                  "description": "Requerido solo si el rol es médico"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Historial (Solo médico)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id_turno\": 3,\n    \"diagnostico\": \"Gripe común\",\n    \"tratamiento\": \"Reposo y paracetamol por 3 días\",\n    \"observaciones\": \"Volver si los síntomas persisten\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/historial",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "historial"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notificaciones",
+      "item": [
+        {
+          "name": "Listar Notificaciones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notificaciones",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notificaciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Marcar Notificación como Leída",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notificaciones/:id/leida",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notificaciones",
+                ":id",
+                "leida"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
                 }
               ]
             }
