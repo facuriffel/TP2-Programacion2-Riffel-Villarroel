@@ -796,6 +796,446 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Usuarios (Admin)",
+      "description": "CRUD administrativo de usuarios y médicos. Requiere rol administrador. Las mutaciones quedan registradas en log_auditoria (entidad usuario).",
+      "item": [
+        {
+          "name": "Listar todos los usuarios",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tp2_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tp2_token}}",
+                "type": "text"
+              }
+            ],
+            "description": "Acceso: exclusivo rol \"administrador\".\n\nParámetros esperados: ninguno (sin body ni query).\n\nRespuesta esperada: formato { codigo, estado, datos }. 200: { \"codigo\": 200, \"estado\": \"ok\", \"datos\": { \"usuarios\": [ { \"id\": number, \"nombre\": string, \"apellido\": string, \"email\": string, \"rol\": string, \"id_cobertura\": number|null, \"id_sede\": number|null } ] } }. 401/403 si el token falta o el rol no es administrador.",
+            "url": {
+              "raw": "{{base_url}}/usuarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear usuario/médico",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tp2_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tp2_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Acceso: exclusivo rol \"administrador\". Audita ALTA sobre entidad usuario.\n\nParámetros esperados (Body JSON): nombre (string), apellido (string), dni (string/number, requerido), fecha_nacimiento (string YYYY-MM-DD, opcional), email (string), password (string), rol (string: paciente|medico|operador|administrador), id_cobertura (number|null), id_sede (number|null).\n\nRespuesta esperada: formato { codigo, estado, datos }. 201: { \"codigo\": 201, \"estado\": \"ok\", \"datos\": { \"mensaje\": \"Usuario creado exitosamente\" } }.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Laura\",\n    \"apellido\": \"Gómez\",\n    \"dni\": \"30111222\",\n    \"fecha_nacimiento\": \"1988-04-12\",\n    \"email\": \"laura.gomez@ejemplo.com\",\n    \"password\": \"1234\",\n    \"rol\": \"medico\",\n    \"id_cobertura\": null,\n    \"id_sede\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/usuarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Modificar datos de usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tp2_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tp2_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "description": "Acceso: exclusivo rol \"administrador\". Audita MODIFICACION sobre entidad usuario.\n\nParámetros esperados: path id (number). Body JSON: nombre (string), apellido (string), dni (string/number), fecha_nacimiento (string YYYY-MM-DD|null), email (string), rol (string), id_cobertura (number|null), id_sede (number|null). No actualiza password.\n\nRespuesta esperada: formato { codigo, estado, datos }. 200: { \"codigo\": 200, \"estado\": \"ok\", \"datos\": { \"mensaje\": \"Usuario modificado exitosamente\" } }.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Laura\",\n    \"apellido\": \"Gómez\",\n    \"dni\": \"30111222\",\n    \"fecha_nacimiento\": \"1988-04-12\",\n    \"email\": \"laura.gomez@ejemplo.com\",\n    \"rol\": \"medico\",\n    \"id_cobertura\": null,\n    \"id_sede\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/usuarios/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuarios",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar usuario sin dependencias",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tp2_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tp2_token}}",
+                "type": "text"
+              }
+            ],
+            "description": "Acceso: exclusivo rol \"administrador\". Audita BAJA sobre entidad usuario.\n\nParámetros esperados: path id (number). Sin body. Rechaza la baja si hay turnos o agendas asociadas.\n\nRespuesta esperada: formato { codigo, estado, datos }. 200: { \"codigo\": 200, \"estado\": \"ok\", \"datos\": { \"mensaje\": \"Usuario eliminado exitosamente\" } }. 400: { \"codigo\": 400, \"estado\": \"error\", \"datos\": { \"mensaje\": \"No se puede eliminar el usuario porque cuenta con turnos o agendas asociadas.\" } }.",
+            "url": {
+              "raw": "{{base_url}}/usuarios/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuarios",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auditoría",
+      "description": "Consulta de log_auditoria. Exclusivo administrador.",
+      "item": [
+        {
+          "name": "Listar logs de auditoría",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tp2_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tp2_token}}",
+                "type": "text"
+              }
+            ],
+            "description": "Acceso: exclusivo rol \"administrador\".\n\nParámetros esperados (Query Params, todos opcionales): id_usuario (number), entidad (string: usuario|sede|especialidad|cobertura), desde (string YYYY-MM-DD), hasta (string YYYY-MM-DD).\n\nRespuesta esperada: formato { codigo, estado, datos }. 200: { \"codigo\": 200, \"estado\": \"ok\", \"datos\": { \"logs\": [ { \"id\": number, \"id_usuario\": number, \"nombre\": string, \"apellido\": string, \"email\": string, \"accion\": string, \"entidad\": string, \"detalle\": string, \"fecha\": datetime } ] } }.",
+            "url": {
+              "raw": "{{base_url}}/auditoria?id_usuario=1&entidad=usuario&desde=2026-01-01&hasta=2026-12-31",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auditoria"
+              ],
+              "query": [
+                {
+                  "key": "id_usuario",
+                  "value": "1",
+                  "description": "number (opcional). Usuario que ejecutó la acción."
+                },
+                {
+                  "key": "entidad",
+                  "value": "usuario",
+                  "description": "string (opcional). Ej.: usuario, sede, especialidad, cobertura."
+                },
+                {
+                  "key": "desde",
+                  "value": "2026-01-01",
+                  "description": "date YYYY-MM-DD (opcional). Inclusive desde 00:00:00."
+                },
+                {
+                  "key": "hasta",
+                  "value": "2026-12-31",
+                  "description": "date YYYY-MM-DD (opcional). Inclusive hasta 23:59:59."
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reportes y Estadísticas",
+      "description": "Reportes de Semana 4. Contrato esperado para GET /reportes/*. Requiere rol administrador. El módulo backend de reportes aún no está montado en index.js; estas requests documentan el cierre acordado.",
+      "item": [
+        {
+          "name": "Turnos por especialidad",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tp2_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tp2_token}}",
+                "type": "text"
+              }
+            ],
+            "description": "Acceso: exclusivo rol \"administrador\".\n\nParámetros esperados (Query Params, opcionales): desde (string YYYY-MM-DD), hasta (string YYYY-MM-DD).\n\nRespuesta esperada: formato { codigo, estado, datos }. 200: { \"codigo\": 200, \"estado\": \"ok\", \"datos\": { \"especialidades\": [ { \"id_especialidad\": number, \"descripcion\": string, \"cantidad_turnos\": number } ] } }.",
+            "url": {
+              "raw": "{{base_url}}/reportes/especialidades?desde=2026-01-01&hasta=2026-12-31",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes",
+                "especialidades"
+              ],
+              "query": [
+                {
+                  "key": "desde",
+                  "value": "2026-01-01",
+                  "description": "date YYYY-MM-DD (opcional)."
+                },
+                {
+                  "key": "hasta",
+                  "value": "2026-12-31",
+                  "description": "date YYYY-MM-DD (opcional)."
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Turnos por sede",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tp2_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tp2_token}}",
+                "type": "text"
+              }
+            ],
+            "description": "Acceso: exclusivo rol \"administrador\".\n\nParámetros esperados (Query Params, opcionales): desde (string YYYY-MM-DD), hasta (string YYYY-MM-DD).\n\nRespuesta esperada: formato { codigo, estado, datos }. 200: { \"codigo\": 200, \"estado\": \"ok\", \"datos\": { \"sedes\": [ { \"id_sede\": number, \"nombre\": string, \"cantidad_turnos\": number } ] } }.",
+            "url": {
+              "raw": "{{base_url}}/reportes/sedes?desde=2026-01-01&hasta=2026-12-31",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes",
+                "sedes"
+              ],
+              "query": [
+                {
+                  "key": "desde",
+                  "value": "2026-01-01",
+                  "description": "date YYYY-MM-DD (opcional)."
+                },
+                {
+                  "key": "hasta",
+                  "value": "2026-12-31",
+                  "description": "date YYYY-MM-DD (opcional)."
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ranking de médicos",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tp2_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tp2_token}}",
+                "type": "text"
+              }
+            ],
+            "description": "Acceso: exclusivo rol \"administrador\".\n\nParámetros esperados (Query Params, opcionales): desde (string YYYY-MM-DD), hasta (string YYYY-MM-DD).\n\nRespuesta esperada: formato { codigo, estado, datos }. 200: { \"codigo\": 200, \"estado\": \"ok\", \"datos\": { \"ranking\": [ { \"id_medico\": number, \"nombre\": string, \"apellido\": string, \"cantidad_turnos\": number } ] } }.",
+            "url": {
+              "raw": "{{base_url}}/reportes/ranking-medicos?desde=2026-01-01&hasta=2026-12-31",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes",
+                "ranking-medicos"
+              ],
+              "query": [
+                {
+                  "key": "desde",
+                  "value": "2026-01-01",
+                  "description": "date YYYY-MM-DD (opcional)."
+                },
+                {
+                  "key": "hasta",
+                  "value": "2026-12-31",
+                  "description": "date YYYY-MM-DD (opcional)."
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Tasa de cancelación",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tp2_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tp2_token}}",
+                "type": "text"
+              }
+            ],
+            "description": "Acceso: exclusivo rol \"administrador\".\n\nParámetros esperados (Query Params, opcionales): desde (string YYYY-MM-DD), hasta (string YYYY-MM-DD).\n\nRespuesta esperada: formato { codigo, estado, datos }. 200: { \"codigo\": 200, \"estado\": \"ok\", \"datos\": { \"total_turnos\": number, \"turnos_cancelados\": number, \"tasa_cancelacion\": number } }.",
+            "url": {
+              "raw": "{{base_url}}/reportes/tasa-cancelacion?desde=2026-01-01&hasta=2026-12-31",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes",
+                "tasa-cancelacion"
+              ],
+              "query": [
+                {
+                  "key": "desde",
+                  "value": "2026-01-01",
+                  "description": "date YYYY-MM-DD (opcional)."
+                },
+                {
+                  "key": "hasta",
+                  "value": "2026-12-31",
+                  "description": "date YYYY-MM-DD (opcional)."
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "auth": {
@@ -809,6 +1249,14 @@
     ]
   },
   "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000"
+    },
     {
       "key": "tp2_token",
       "value": ""
