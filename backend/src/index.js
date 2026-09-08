@@ -15,6 +15,7 @@ app.use('/turnos', require('./routes/turno.routes'));
 app.use('/historial', require('./routes/historial.routes'));
 app.use('/notificaciones', require('./routes/notificacion.routes'));
 app.use('/auditoria', require('./routes/auditoria.routes'));
+app.use('/reportes', require('./routes/reporte.routes'));
 
 const PORT = process.env.PORT || 3000;
 

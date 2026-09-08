@@ -1045,7 +1045,7 @@
     },
     {
       "name": "Reportes y Estadísticas",
-      "description": "Reportes de Semana 4. Contrato esperado para GET /reportes/*. Requiere rol administrador. El módulo backend de reportes aún no está montado en index.js; estas requests documentan el cierre acordado.",
+      "description": "Reportes de Semana 4. Endpoints GET /reportes/*. Requiere rol administrador.",
       "item": [
         {
           "name": "Turnos por especialidad",
